@@ -130,13 +130,13 @@ st.markdown('<div class="hero-title">MedStudy AI</div>', unsafe_allow_html=True)
 st.markdown('<div class="hero-sub">Upload your lecture handout. Get exam-ready Q&A. Export and study.</div>', unsafe_allow_html=True)
 
 # API Key input
-with st.expander("🔑 Enter your Anthropic API Key", expanded=not bool(os.environ.get("ANTHROPIC_API_KEY"))):
-    api_key_input = st.text_input("API Key", type="password", placeholder="sk-ant-...", label_visibility="collapsed")
+with st.expander("🔑 Enter your Gemini API Key", expanded=not bool(os.environ.get("GEMINI_API_KEY"))):
+    api_key_input = st.text_input("API Key", type="password", placeholder="AIza...", label_visibility="collapsed")
     if api_key_input:
-        os.environ["ANTHROPIC_API_KEY"] = api_key_input
+        os.environ["GEMINI_API_KEY"] = api_key_input
         st.success("API key set for this session.")
 
-api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+api_key = os.environ.get("GEMINI_API_KEY", "")
 
 st.markdown("---")
 
