@@ -1,15 +1,17 @@
-import anthropic
+import google.generativeai as genai
 import json
 import re
 
+
 def generate_qa(pdf_text: str, num_questions: int, subject: str, api_key: str) -> list[tuple[str, str]]:
     """
-    Send PDF text to Claude and get back exam-style Q&A pairs.
+    Send PDF text to Gemini and get back exam-style Q&A pairs.
     Returns a list of (question, answer) tuples.
     """
-    client = anthropic.Anthropic(api_key=api_key)
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel("gemini-1.5-flash")
 
-    # Chunk text if too long (Claude has context limits)
+    # Chunk text if too long
     max_chars = 80000
     if len(pdf_text) > max_chars:
         pdf_text = pdf_text[:max_chars] + "\n\n[Text truncated due to length]"
@@ -40,13 +42,15 @@ HANDOUT CONTENT:
 {pdf_text}
 """
 
-    message = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=8000,
-        messages=[{"role": "user", "content": prompt}]
+    response = model.generate_content(
+        prompt,
+        generation_config=genai.types.GenerationConfig(
+            temperature=0.3,
+            max_output_tokens=8000,
+        )
     )
 
-    raw = message.content[0].text.strip()
+    raw = response.text.strip()
 
     # Clean up any accidental markdown fences
     raw = re.sub(r"^```json\s*", "", raw)
