@@ -9,7 +9,7 @@ def generate_qa(pdf_text: str, num_questions: int, subject: str, api_key: str) -
     Returns a list of (question, answer) tuples.
     """
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.0-flash")
 
     # Chunk text if too long
     max_chars = 80000
